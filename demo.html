@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+
+	<title>taggd basic demo</title>
+
+	<link rel="stylesheet" href="./css/normalize.css" />
+	<link rel="stylesheet" href="./css/taggd.css" />
+
+	<style>
+		img {
+			display: block;
+			width: 100%;
+		}
+	</style>
+
+	<script src="http://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+	<script src="./js/jquery.taggd.js"></script>
+</head>
+<body>
+
+<img src="./img/test.jpg" class="taggd" alt="" />
+
+<script>
+	var options = {
+		edit: true,
+
+		align: {
+			y: 'top',
+			x: 'left'
+		},
+
+		offset: {
+			top: 15
+		},
+
+		handlers: {
+			click: 'toggle'
+		}
+	};
+
+	var data = [
+		{ x: 0.62, y: 0.7, text: 'Rope'             },
+		{ x: 0.51, y: 0.5, text: 'Bird'             },
+		{ x: 0.40, y: 0.3, text: 'Water, obviously' },
+		{ x: 1, y: 1, text: '蛤蛤' }
+	];
+
+	var taggd = $('.taggd').taggd( options, data );
+
+	taggd.on('change', function() {
+		console.log(taggd.data);
+	});
+</script>
+
+</body>
+</html>
