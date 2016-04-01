@@ -18,7 +18,8 @@
 
         strings: {
             save: '&#x2713;',
-            delete: '&#x00D7;'
+            delete: '&#x00D7;',
+            addLink: '&#64;'
         }
     };
 
@@ -87,7 +88,10 @@
         this.initialized = true;
 
         this.initWrapper();
-        this.addDOM();
+
+        if (this.data.length > 0) {
+            this.renderTags();
+        }
 
         if (this.options.edit) {
             this.element.on('click', function (e) {
@@ -202,10 +206,35 @@
 
 
     /****************************************************************
-     * DOM
+     * DATA MANAGEMENT
      ****************************************************************/
 
-    Taggd.prototype.addDOM = function () {
+    Taggd.prototype.addData = function (data) {
+        if ($.isArray(data)) {
+            this.data = $.merge(this.data, data);
+        } else {
+            this.data.push(data);
+        }
+
+        if (this.initialized) {
+            this.renderTags();
+            this.element.triggerHandler('change');
+        }
+    };
+
+
+    Taggd.prototype.clear = function () {
+        if (!this.initialized) return;
+        this.wrapper.find('.taggd-item, .taggd-item-hover').remove();
+    };
+
+
+    /****************************************************************
+     * TAG DOM
+     ****************************************************************/
+
+    Taggd.prototype.renderTags = function () {
+        console.log('renderTags');
         var _this = this;
 
         this.clear();
@@ -226,7 +255,7 @@
             _this.wrapper.append($item);
 
             if (typeof v.text === 'string' && (v.text.length > 0 || _this.options.edit)) {
-                $hover = $('<span class="taggd-item-hover show" style="position: absolute;" />').html(v.text);
+                $hover = $('<span class="taggd-item-hover show complete" style="position: absolute;" />').html(v.text);
 
                 $hover.attr({
                     'data-x': v.x,
@@ -257,56 +286,70 @@
         this.element.removeAttr('style');
 
         if (this.options.edit) {
-            this.alterDOM();
+            this.renderEditTags();
         }
 
         this.updateDOM();
     };
 
-    Taggd.prototype.alterDOM = function () {
+
+    Taggd.prototype.renderEditTags = function () {
         var _this = this;
 
         this.wrapper.find('.taggd-item-hover').each(function () {
-            var $e = $(this);
-            var $input = $('<input type="text" />').val($e.text());
-            var $button_ok = $('<button />').html(_this.options.strings.save);
-            var $button_delete = $('<button />').html(_this.options.strings.delete);
+                var $e = $(this);
+                var $input = $('<input type="text" />').val($e.text());
+                var $button_ok = $('<button />').html(_this.options.strings.save);
+                var $button_delete = $('<button />').html(_this.options.strings.delete);
+                var $button_link = $('<button />').html(_this.options.strings.addLink);
 
-            $button_ok.on('click', function () {
-                _this.hide();
-            });
-
-            $button_delete.on('click', function () {
-                var x = $e.attr('data-x');
-                var y = $e.attr('data-y');
-
-                _this.data = $.grep(_this.data, function (v) {
-                    return v.x != x || v.y != y;
+                $button_ok.on('click', function () {
+                    $e.addClass('complete');
                 });
 
-                _this.addDOM();
-                _this.element.triggerHandler('change');
-            });
+                $button_link.on('click', function () {
+                    
+                });
 
-            $input.on('change', function () {
-                var x = $e.attr('data-x'),
-                    y = $e.attr('data-y'),
-                    item = $.grep(_this.data, function (v) {
-                        return v.x == x && v.y == y;
-                    }).pop();
+                $button_delete.on('click', function () {
+                    var x = $e.attr('data-x');
+                    var y = $e.attr('data-y');
 
-                if (item) item.text = $input.val();
+                    _this.data = $.grep(_this.data, function (v) {
+                        return v.x != x || v.y != y;
+                    });
 
-                _this.addDOM();
-                _this.element.triggerHandler('change');
-            });
+                    _this.renderTags();
+                    $(_this.element).trigger('change');
+                });
 
-            $e.empty().append($input, $button_ok, $button_delete);
-        });
-    };
+                $input.on('change', function () {
+                    var x = $e.attr('data-x'),
+                        y = $e.attr('data-y'),
+                        item = $.grep(_this.data, function (v) {
+                            return v.x == x && v.y == y;
+                        }).pop();
+
+                    if (item) {
+                        item.text = $input.val();
+                    }
+
+                    _this.renderTags();
+                    $(_this.element).trigger('change');
+                });
+
+                $input.on('focus', function () {
+                    $e.removeClass('complete');
+                });
+
+                $e.empty().append($input, $button_ok, $button_delete, $button_link);
+            }
+        );
+    }
+    ;
 
     Taggd.prototype.updateDOM = function () {
-        console.log('a')
+        console.log('update');
         var _this = this;
 
         this.wrapper.removeAttr('style').css({
@@ -356,4 +399,5 @@
     $.fn.taggd = function (options, data) {
         return new Taggd(this, options, data);
     };
-})(jQuery);
+})
+(jQuery);

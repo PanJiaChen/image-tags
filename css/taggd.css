@@ -63,6 +63,15 @@
     display: block;
 }
 
+.taggd-wrapper .taggd-item-hover.complete button {
+    display: none;
+
+}
+
+.taggd-wrapper .taggd-item-hover.complete {
+    background: #66D37E;
+}
+
 .taggd-wrapper .taggd-item-hover input {
     background-color: transparent;
     border: 0;
