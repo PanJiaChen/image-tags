@@ -1,56 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
 
-	<title>taggd basic demo</title>
+    <title>image with tags</title>
 
-	<link rel="stylesheet" href="./css/normalize.css" />
-	<link rel="stylesheet" href="./css/taggd.css" />
+    <link rel="stylesheet" href="./css/normalize.css"/>
+    <link rel="stylesheet" href="./css/taggd.css"/>
 
-	<style>
-		img {
-			display: block;
-			width: 100%;
-		}
-	</style>
+    <style>
+        img {
+            display: block;
+            width: 100%;
+        }
 
-	<script src="http://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
-	<script src="./js/jquery.taggd.js"></script>
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+    </style>
+
+    <script src="http://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="./js/jquery.taggd.js"></script>
 </head>
 <body>
+<div class="container">
+    <img src="./img/test.jpg" class="taggd" alt=""/>
 
-<img src="./img/test.jpg" class="taggd" alt="" />
+    <div class="option-control">
+        <select class="js-model" title="模式切换">
+            <option value='1'>编辑</option>
+            <option value='0'>预览</option>
+        </select>
+    </div>
+</div>
+
 
 <script>
-	var options = {
-		edit: false,
+    var options = {
+        edit: true,
 
-		align: {
-			y: 'top',
-			x: 'left'
-		},
+        align: {
+            y: 'top',
+            x: 'left'
+        },
 
-		offset: {
-			top: 15
-		},
+        offset: {
+            top: 15
+        },
 
-		handlers: {
-			click: 'toggle'
-		}
-	};
+        handlers: {
+            click: 'toggle'
+        }
+    };
 
-	var data = [
-		{ x: 0.62, y: 0.7, text: '潘蛤'             },
-		{ x: 0.51, y: 0.5, text: '龙蛤'             },
-		{ x: 0.40, y: 0.3, text: 'apple',link:'http://gold.xitu.io/#/' }
-	];
+    var data = [
+        {x: 0.62, y: 0.7, text: '潘蛤'},
+        {x: 0.51, y: 0.5, text: '龙蛤'},
+        {x: 0.40, y: 0.3, text: 'apple', link: 'http://gold.xitu.io/#/'}
+    ];
 
-	var taggd = $('.taggd').taggd( options, data );
+    var taggd = $('.taggd').taggd(options, data);
 
-	taggd.on('change', function() {
-		console.log(taggd.data);
-	});
+    taggd.on('change', function () {
+        data = taggd.data;
+    });
+
+    $('.js-model').on('change',function(){
+        var value=$(this).val();
+        options.edit=!!+value;
+        console.log(options)
+        taggd = $('.taggd').taggd(options, data);
+    })
 </script>
 
 </body>

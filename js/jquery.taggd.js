@@ -72,6 +72,7 @@
         this.data = data;
         this.initialized = false;
 
+
         if (!this.element.height() || !this.element.width()) {
             this.element.on('load', _this.initialize.bind(this));
         } else this.initialize();
@@ -86,7 +87,6 @@
         var _this = this;
 
         this.initialized = true;
-
         this.initWrapper();
 
         if (this.data.length > 0) {
@@ -115,6 +115,13 @@
     };
 
     Taggd.prototype.initWrapper = function () {
+        /*防止重渲染*/
+        var $target=$(document).find('.taggd-wrapper');
+        if($target.length>0){
+            this.wrapper=$target;
+            return
+        }
+
         var wrapper = $('<div class="taggd-wrapper" />');
         this.element.wrap(wrapper);
 
@@ -218,7 +225,7 @@
 
         if (this.initialized) {
             this.renderTags();
-            this.element.triggerHandler('change');
+
         }
     };
 
@@ -260,11 +267,11 @@
             }
 
             /*todo 判断是否有link */
-            if (typeof v.link === 'string' && v.link.length > 0 ) {
-                if(_this.options.edit){
+            if (typeof v.link === 'string' && v.link.length > 0) {
+                if (_this.options.edit) {
                     $item.next().attr('data-link', v.link);
-                }else{
-                    $item.next().empty().html('<a href="'+v.link+'" target="_blank">'+ v.text+'</a>');
+                } else {
+                    $item.next().empty().html('<a href="' + v.link + '" target="_blank">' + v.text + '</a>');
                 }
 
             }
@@ -301,74 +308,70 @@
         var _this = this;
 
         this.wrapper.find('.taggd-item-hover').each(function () {
-                var $e = $(this);
-                var linkUrl = $e.attr('data-link');
-                var $input = $('<input type="text" />').val($e.text());
-                var $button_ok = $('<button />').html(_this.options.strings.save);
-                var $button_delete = $('<button />').html(_this.options.strings.delete);
-                var $button_link = $('<button />').html(_this.options.strings.addLink);
-                var $input_link = $('<input class="tag-link" />').val(linkUrl);
+            var $e = $(this);
+            var linkUrl = $e.attr('data-link');
+            var $input = $('<input type="text" />').val($e.text());
+            var $button_ok = $('<button />').html(_this.options.strings.save);
+            var $button_delete = $('<button />').html(_this.options.strings.delete);
+            var $button_link = $('<button />').html(_this.options.strings.addLink);
+            var $input_link = $('<input class="tag-link" />').val(linkUrl);
 
-                $button_ok.on('click', function () {
-                    $e.addClass('complete');
-                    var x = $e.attr('data-x'),
-                        y = $e.attr('data-y'),
-                        item = $.grep(_this.data, function (v) {
-                            return v.x == x && v.y == y;
-                        }).pop();
-                    var $link = $e.find('.tag-link');
+            $button_ok.on('click', function () {
+                $e.addClass('complete');
+                var x = $e.attr('data-x'),
+                    y = $e.attr('data-y'),
+                    item = $.grep(_this.data, function (v) {
+                        return v.x == x && v.y == y;
+                    }).pop();
+                var $link = $e.find('.tag-link');
 
-                    if (item) {
-                        item.text = $input.val();
-                    }
-
-                    if ($link) {
-                        item.link = $link.val();
-                    }
-
-                    _this.renderTags();
-                    $(_this.element).trigger('change');
-                });
-
-                $button_link.on('click', function () {
-                    $e.append($input_link);
-                    $input_link.focus();
-                });
-
-                $button_delete.on('click', function () {
-                    var x = $e.attr('data-x');
-                    var y = $e.attr('data-y');
-
-                    _this.data = $.grep(_this.data, function (v) {
-                        return v.x != x || v.y != y;
-                    });
-
-                    _this.renderTags();
-                    $(_this.element).trigger('change');
-                });
-
-                $input.on('change', function () {
-
-                });
-
-                $input.on('focus', function () {
-                    $e.removeClass('complete');
-                });
-
-
-                if (linkUrl) {
-                    $e.empty().append($input, $button_ok, $button_delete, $button_link, $input_link);
-                } else {
-                    $e.empty().append($input, $button_ok, $button_delete, $button_link);
+                if (item) {
+                    item.text = $input.val();
                 }
 
+                if ($link) {
+                    item.link = $link.val();
+                }
+
+                _this.renderTags();
+            });
+
+            $button_link.on('click', function () {
+                $e.append($input_link);
+                $input_link.focus();
+            });
+
+            $button_delete.on('click', function () {
+                var x = $e.attr('data-x');
+                var y = $e.attr('data-y');
+
+                _this.data = $.grep(_this.data, function (v) {
+                    return v.x != x || v.y != y;
+                });
+
+                _this.renderTags();
+            });
+
+            $input.on('change', function () {
+
+            });
+
+            $input.on('focus', function () {
+                $e.removeClass('complete');
+            });
+
+
+            if (linkUrl) {
+                $e.empty().append($input, $button_ok, $button_delete, $button_link, $input_link);
+            } else {
+                $e.empty().append($input, $button_ok, $button_delete, $button_link);
             }
-        );
+        })
     }
-    ;
 
     Taggd.prototype.updateDOM = function () {
         console.log('update');
+        this.element.triggerHandler('change');
         var _this = this;
 
         this.wrapper.removeAttr('style').css({
