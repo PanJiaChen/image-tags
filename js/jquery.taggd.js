@@ -223,12 +223,6 @@
     };
 
 
-    Taggd.prototype.clear = function () {
-        if (!this.initialized) return;
-        this.wrapper.find('.taggd-item, .taggd-item-hover').remove();
-    };
-
-
     /****************************************************************
      * TAG DOM
      ****************************************************************/
@@ -265,6 +259,16 @@
                 _this.wrapper.append($hover);
             }
 
+            /*todo 判断是否有link */
+            if (typeof v.link === 'string' && v.link.length > 0 ) {
+                if(_this.options.edit){
+                    $item.next().attr('data-link', v.link);
+                }else{
+                    $item.next().empty().html('<a href="'+v.link+'" target="_blank">'+ v.text+'</a>');
+                }
+
+            }
+
             if (typeof _this.options.handlers === 'object') {
                 $.each(_this.options.handlers, function (event, func) {
                     var handler;
@@ -298,17 +302,37 @@
 
         this.wrapper.find('.taggd-item-hover').each(function () {
                 var $e = $(this);
+                var linkUrl = $e.attr('data-link');
                 var $input = $('<input type="text" />').val($e.text());
                 var $button_ok = $('<button />').html(_this.options.strings.save);
                 var $button_delete = $('<button />').html(_this.options.strings.delete);
                 var $button_link = $('<button />').html(_this.options.strings.addLink);
+                var $input_link = $('<input class="tag-link" />').val(linkUrl);
 
                 $button_ok.on('click', function () {
                     $e.addClass('complete');
+                    var x = $e.attr('data-x'),
+                        y = $e.attr('data-y'),
+                        item = $.grep(_this.data, function (v) {
+                            return v.x == x && v.y == y;
+                        }).pop();
+                    var $link = $e.find('.tag-link');
+
+                    if (item) {
+                        item.text = $input.val();
+                    }
+
+                    if ($link) {
+                        item.link = $link.val();
+                    }
+
+                    _this.renderTags();
+                    $(_this.element).trigger('change');
                 });
 
                 $button_link.on('click', function () {
-                    
+                    $e.append($input_link);
+                    $input_link.focus();
                 });
 
                 $button_delete.on('click', function () {
@@ -324,25 +348,20 @@
                 });
 
                 $input.on('change', function () {
-                    var x = $e.attr('data-x'),
-                        y = $e.attr('data-y'),
-                        item = $.grep(_this.data, function (v) {
-                            return v.x == x && v.y == y;
-                        }).pop();
 
-                    if (item) {
-                        item.text = $input.val();
-                    }
-
-                    _this.renderTags();
-                    $(_this.element).trigger('change');
                 });
 
                 $input.on('focus', function () {
                     $e.removeClass('complete');
                 });
 
-                $e.empty().append($input, $button_ok, $button_delete, $button_link);
+
+                if (linkUrl) {
+                    $e.empty().append($input, $button_ok, $button_delete, $button_link, $input_link);
+                } else {
+                    $e.empty().append($input, $button_ok, $button_delete, $button_link);
+                }
+
             }
         );
     }
