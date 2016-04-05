@@ -392,14 +392,22 @@
             var top = $el.attr('data-y') * _this.element.height();
 
             if ($el.hasClass('taggd-item')) {
-                var baseSize = _this.options.radioBaseSize || 30;
-                var size = $el.attr('data-p') * baseSize;
-                $el.css({
-                    left: left - $el.outerWidth(true) / 2,
-                    top: top - $el.outerHeight(true) / 2,
-                    width: size,
-                    height: size
-                });
+                if (_this.options.tagsType && _this.options.tagsType == 'radio') {
+                    var baseSize = _this.options.radioBaseSize || 30;
+                    var size = $el.attr('data-p') * baseSize;
+                    $el.css({
+                        left: left - $el.outerWidth(true) / 2,
+                        top: top - $el.outerHeight(true) / 2,
+                        width: size,
+                        height: size
+                    });
+                } else {
+                    $el.css({
+                        left: left - $el.outerWidth(true) / 2,
+                        top: top - $el.outerHeight(true) / 2
+                    });
+                }
+
             } else if ($el.hasClass('taggd-item-hover')) {
                 if (_this.options.align.x === 'center') {
                     left -= $el.outerWidth(true) / 2;

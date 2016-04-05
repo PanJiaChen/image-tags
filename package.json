@@ -1,0 +1,28 @@
+{
+    "name": "image-tags",
+    "version": "0.0.1",
+    "description": "A jQuery plugin that you can adds tags to your image.",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/PanJiaChen/image-tags"
+    },
+    "keywords": [
+        "jquery-plugin",
+        "tags",
+        "jquery",
+        "image"
+    ],
+  "main": "js/jquery.tags.js",
+  "style": "css/tags.css",
+    "author": {
+        "name": "PanJiaChen",
+        "email": "466595307@qq.com"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/PanJiaChen/image-tags/issues"
+    },
+    "devDependencies": {
+
+    }
+}
