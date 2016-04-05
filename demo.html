@@ -38,26 +38,28 @@
 
 <script>
     var options = {
-        edit: true,
-
+        edit: false,
+        tagsType: 'radio',
+        radioBaseSize: 24,
         align: {
             y: 'top',
             x: 'left'
         },
 
         offset: {
-            top: 15
+            top: -15,
+            left: 20
         },
 
         handlers: {
-            click: 'toggle'
+//            click: 'toggle'
         }
     };
 
     var data = [
-        {x: 0.62, y: 0.7, text: '潘蛤'},
-        {x: 0.51, y: 0.5, text: '龙蛤'},
-        {x: 0.40, y: 0.3, text: 'apple', link: 'http://gold.xitu.io/#/'}
+        {x: 0.62, y: 0.7, text: '潘蛤', percent: 0.1},
+        {x: 0.51, y: 0.5, text: '龙蛤', percent: 0.2},
+        {x: 0.40, y: 0.3, text: 'apple', link: 'http://gold.xitu.io/#/', percent: 0.7}
     ];
 
     var taggd = $('.taggd').taggd(options, data);
@@ -66,10 +68,10 @@
         data = taggd.data;
     });
 
-    $('.js-model').on('change',function(){
-        var value=$(this).val();
-        options.edit=!!+value;
-        console.log(options)
+    $('.js-model').on('change', function () {
+        var value = $(this).val();
+        options.edit = !!+value;
+        console.log(options);
         taggd = $('.taggd').taggd(options, data);
     })
 </script>

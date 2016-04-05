@@ -116,9 +116,9 @@
 
     Taggd.prototype.initWrapper = function () {
         /*防止重渲染*/
-        var $target=$(document).find('.taggd-wrapper');
-        if($target.length>0){
-            this.wrapper=$target;
+        var $target = $(document).find('.taggd-wrapper');
+        if ($target.length > 0) {
+            this.wrapper = $target;
             return
         }
 
@@ -242,12 +242,18 @@
         this.element.css({height: 'auto', width: 'auto'});
 
         $.each(this.data, function (i, v) {
-            var $item = $('<span />');
+            if (_this.options.tagsType == 'radio') {
+                var $item = $('<input type="radio" name="tags" />');
+            } else {
+                var $item = $('<span />');
+            }
+
             var $hover;
 
             $item.attr({
                 'data-x': v.x,
-                'data-y': v.y
+                'data-y': v.y,
+                'data-p': v.percent
             });
 
             $item.css('position', 'absolute');
@@ -379,16 +385,20 @@
             width: this.element.width()
         });
 
-        this.wrapper.find('span').each(function (i, e) {
+        this.wrapper.find("[class*='taggd-item']").each(function (i, e) {
             var $el = $(e);
 
             var left = $el.attr('data-x') * _this.element.width();
             var top = $el.attr('data-y') * _this.element.height();
 
             if ($el.hasClass('taggd-item')) {
+                var baseSize = _this.options.radioBaseSize || 30;
+                var size = $el.attr('data-p') * baseSize;
                 $el.css({
                     left: left - $el.outerWidth(true) / 2,
-                    top: top - $el.outerHeight(true) / 2
+                    top: top - $el.outerHeight(true) / 2,
+                    width: size,
+                    height: size
                 });
             } else if ($el.hasClass('taggd-item-hover')) {
                 if (_this.options.align.x === 'center') {

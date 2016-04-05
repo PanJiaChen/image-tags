@@ -16,11 +16,157 @@
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     border-radius: 50%;
-
     -webkit-transition: background-color 0.2s;
     -moz-transition: background-color 0.2s;
     transition: background-color 0.2s;
 }
+
+/*radio*/
+.taggd-wrapper input[type=radio].taggd-item {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    min-width: 12px;
+    min-height: 12px;
+    padding: 0px;
+    -webkit-transition: all .15s ease-out;
+    transition: all .15s ease-out;
+    background: #fff;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    outline: 0;
+    position: relative;
+    vertical-align: -5px;
+}
+
+.taggd-wrapper input[type=radio].taggd-item:checked {
+    border: 1px solid #0A96FF;
+}
+
+.taggd-wrapper input[type=radio].taggd-item:checked::before {
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    content: ' ';
+    display: inline-block;
+    border-radius: 50%;
+    background-color: #0A96FF;
+    text-align: center;
+    left: 50%;
+    margin-left: -4px;
+    top: 50%;
+    margin-top: -4px;
+}
+
+.taggd-wrapper input[type=radio].taggd-item:focus {
+    outline: none !important;
+    outline-offset: 0px !important;
+}
+
+.taggd-wrapper input[type=radio].taggd-item:checked::after {
+    -webkit-animation: click-wave 0.65s;
+    -moz-animation: click-wave 0.65s;
+    animation: click-wave 0.65s;
+    background: #0A96FF;
+    content: '';
+    display: block;
+    position: relative;
+    z-index: 100;
+    border: none;
+}
+
+.taggd-wrapper input[type=radio].taggd-item {
+    border-radius: 50%;
+}
+
+.taggd-wrapper input[type=radio].taggd-item::after {
+    border-radius: 50%;
+}
+
+@-webkit-keyframes click-wave {
+    0% {
+        width: 40px;
+        height: 40px;
+        opacity: 0.35;
+        margin-left: -13px;
+        margin-top: -13px;
+        position: relative;
+    }
+    100% {
+        width: 200px;
+        height: 200px;
+        margin-left: -93px;
+        margin-top: -93px;
+        opacity: 0.0;
+    }
+}
+
+@-moz-keyframes click-wave {
+    0% {
+        width: 40px;
+        height: 40px;
+        opacity: 0.35;
+        position: relative;
+        border-radius: 50%;
+        margin-left: -13px;
+        margin-top: -13px;
+    }
+    100% {
+        width: 200px;
+        height: 200px;
+        margin-left: -93px;
+        margin-top: -93px;
+        opacity: 0.0;
+        border-radius: 50%;
+    }
+}
+
+@-o-keyframes click-wave {
+    0% {
+        width: 40px;
+        height: 40px;
+        opacity: 0.35;
+        position: relative;
+        border-radius: 50%;
+        margin-left: -13px;
+        margin-top: -13px;
+    }
+    100% {
+        width: 200px;
+        height: 200px;
+        margin-left: -93px;
+        margin-top: -93px;
+        opacity: 0.0;
+        border-radius: 50%;
+    }
+}
+
+@keyframes click-wave {
+    0% {
+        width: 40px;
+        height: 40px;
+        opacity: 0.35;
+        position: relative;
+        border-radius: 50%;
+        margin-left: -13px;
+        margin-top: -13px;
+    }
+    100% {
+        width: 200px;
+        height: 200px;
+        margin-left: -93px;
+        margin-top: -93px;
+        opacity: 0.0;
+        border-radius: 50%;
+    }
+}
+
+/*radio end*/
 
 .taggd-wrapper .taggd-item.active,
 .taggd-wrapper .taggd-item:hover {
@@ -66,6 +212,7 @@
 .taggd-wrapper .taggd-item-hover.complete button {
     display: none;
 }
+
 .taggd-wrapper .taggd-item-hover.complete .tag-link {
     display: none;
 }
@@ -74,7 +221,7 @@
     background: #66D37E;
 }
 
-.taggd-wrapper .taggd-item-hover .tag-link{
+.taggd-wrapper .taggd-item-hover .tag-link {
     display: block;
     background: #F2A379;
     height: 30px;
@@ -83,6 +230,7 @@
     margin-bottom: -10px;
     width: 109%;
 }
+
 .taggd-wrapper .taggd-item-hover input {
     background-color: transparent;
     border: 0;
@@ -94,7 +242,7 @@
 }
 
 .taggd-wrapper .taggd-item-hover a {
-   text-decoration: none;
+    text-decoration: none;
     color: #fff;
 }
 
