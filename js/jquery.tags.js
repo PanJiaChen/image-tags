@@ -1,6 +1,9 @@
 (function ($) {
     'use strict';
 
+    // keycode
+    var KEY_ENTER = 13;
+
     var defaults = {
         edit: false,
 
@@ -107,6 +110,8 @@
 
                 _this.show(_this.data.length - 1);
             });
+        }else{
+            this.element.unbind("click");
         }
 
         $(window).resize(function () {
@@ -116,12 +121,10 @@
 
     Taggd.prototype.initWrapper = function () {
         /*防止重渲染*/
-        var $target = $(document).find('.taggd-wrapper');
-        if ($target.length > 0) {
-            this.wrapper = $target;
-            return
+        if($(this.element).closest('.taggd-wrapper').length>0){
+            this.wrapper=$(this.element).closest('.taggd-wrapper');
+            return;
         }
-
         var wrapper = $('<div class="taggd-wrapper" />');
         this.element.wrap(wrapper);
 
@@ -225,7 +228,6 @@
 
         if (this.initialized) {
             this.renderTags();
-
         }
     };
 
@@ -237,7 +239,6 @@
     Taggd.prototype.renderTags = function () {
         console.log('renderTags');
         var _this = this;
-
         this.clear();
         this.element.css({height: 'auto', width: 'auto'});
 
@@ -364,6 +365,18 @@
 
             $input.on('focus', function () {
                 $e.removeClass('complete');
+            });
+
+            $input.on("keyup", function (e) {
+                if (e.keyCode == KEY_ENTER) {
+                    $button_ok.trigger('click')
+                }
+            });
+
+            $input_link.on("keyup", function (e) {
+                if (e.keyCode == KEY_ENTER) {
+                    $button_ok.trigger('click')
+                }
             });
 
 

@@ -1,6 +1,6 @@
 {
     "name": "image-tags",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "A jQuery plugin that you can adds tags to your image.",
     "repository": {
         "type": "git",

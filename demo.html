@@ -16,7 +16,7 @@
 
         .container {
             max-width: 1200px;
-            margin: auto;
+            margin: 40px auto;
         }
     </style>
 
@@ -25,7 +25,7 @@
 </head>
 <body>
 <div class="container">
-    <img src="./img/test.jpg" class="taggd" alt=""/>
+    <img src="./img/test.jpg" id='taggd1' alt=""/>
 
     <div class="option-control">
         <select class="js-model" title="模式切换">
@@ -35,12 +35,14 @@
     </div>
 </div>
 
+<div class="container">
+    <img src="./img/test2.jpg" id='taggd2' alt=""/>
+</div>
+
 
 <script>
-    var options = {
-        edit: false,
-        tagsType: 'radio',
-        radioBaseSize: 24,
+    var options1 = {
+        edit: true,
         align: {
             y: 'top',
             x: 'left'
@@ -53,29 +55,59 @@
 
         handlers: {
 //            click: 'toggle'
-//            mouseenter: 'show',
-//            mouseleave: 'hide'
         }
     };
 
-    var data = [
+    var data1 = [
         {x: 0.62, y: 0.7, text: '潘蛤', percent: 0.1},
         {x: 0.51, y: 0.5, text: '龙蛤', percent: 0.2},
         {x: 0.40, y: 0.3, text: 'apple', link: 'http://gold.xitu.io/#/', percent: 0.7}
     ];
 
-    var taggd = $('.taggd').taggd(options, data);
+    var taggd1 = $('#taggd1').taggd(options1, data1);
 
-    taggd.on('change', function () {
-        data = taggd.data;
-    });
+//    taggd1.on('change', function () {
+//        data1 = taggd1.data;
+//    });
 
     $('.js-model').on('change', function () {
         var value = $(this).val();
-        options.edit = !!+value;
-        console.log(options);
-        taggd = $('.taggd').taggd(options, data);
-    })
+        options1.edit = !!+value;
+        console.log(options1);
+        console.log(data1);
+        taggd1 = $('#taggd1').taggd(options1, data1);
+    });
+
+
+    /**
+     * tag2
+     **/
+    var options2 = {
+        edit: false,
+        tagsType: 'radio',
+        radioBaseSize: 24,
+        align: {
+            y: 'top',
+            x: 'left'
+        },
+
+        offset: {
+            top: 10,
+            left: 10
+        },
+        handlers: {
+            mouseenter: 'show',
+            mouseleave: 'hide'
+        }
+    };
+    var data2 = [
+        {x: 0.62, y: 0.7, text: '潘蛤', percent: 0.1},
+        {x: 0.72, y: 0.8, text: '潘蛤', percent: 0.1},
+        {x: 0.51, y: 0.5, text: '龙蛤', percent: 0.2},
+        {x: 0.40, y: 0.3, text: 'apple', link: 'http://gold.xitu.io/#/', percent: 0.7}
+    ];
+    var taggd2 = $('#taggd2').taggd(options2, data2);
+
 </script>
 
 </body>
