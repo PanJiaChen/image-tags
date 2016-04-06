@@ -1,5 +1,5 @@
 .taggd-wrapper {
-    overflow: hidden;
+    /*overflow: hidden;*/
     position: relative;
 
     -webkit-font-smoothing: antialiased;
@@ -269,4 +269,21 @@
 
 .taggd-wrapper .taggd-editor {
     position: absolute;
+}
+
+
+/*radio-submit 预测提交按钮*/
+.tags-radio-submit{
+    position: absolute;
+    height: 40px;
+    width:80px;
+    background: #3490DE;
+    bottom: 0px;
+    border-radius: 4px;
+    left: 0;
+    right: 0;
+    color: #fff;
+    text-align: center;
+    line-height: 40px;
+    margin: 0 auto -80px;
 }

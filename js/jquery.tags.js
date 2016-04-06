@@ -110,7 +110,7 @@
 
                 _this.show(_this.data.length - 1);
             });
-        }else{
+        } else {
             this.element.unbind("click");
         }
 
@@ -121,8 +121,8 @@
 
     Taggd.prototype.initWrapper = function () {
         /*防止重渲染*/
-        if($(this.element).closest('.taggd-wrapper').length>0){
-            this.wrapper=$(this.element).closest('.taggd-wrapper');
+        if ($(this.element).closest('.taggd-wrapper').length > 0) {
+            this.wrapper = $(this.element).closest('.taggd-wrapper');
             return;
         }
         var wrapper = $('<div class="taggd-wrapper" />');
@@ -244,7 +244,7 @@
 
         $.each(this.data, function (i, v) {
             if (_this.options.tagsType == 'radio') {
-                var $item = $('<input type="radio" name="tags" />');
+                var $item = $('<input type="radio" name="tags" id="tags-' + i + '" />');
             } else {
                 var $item = $('<span />');
             }
@@ -263,7 +263,12 @@
             _this.wrapper.append($item);
 
             if (typeof v.text === 'string' && (v.text.length > 0 || _this.options.edit)) {
-                $hover = $('<span class="taggd-item-hover show complete" style="position: absolute;" />').html(v.text);
+                if (_this.options.tagsType == 'radio') {
+                    $hover = $('<label class="taggd-item-hover show complete" for="tags-' + i + '" style="position: absolute;" />').html(v.text);
+                } else {
+                    $hover = $('<span class="taggd-item-hover show complete" style="position: absolute;" />').html(v.text);
+                }
+
 
                 $hover.attr({
                     'data-x': v.x,
@@ -273,8 +278,8 @@
                 _this.wrapper.append($hover);
             }
 
-            /*todo 判断是否有link */
-            if (typeof v.link === 'string' && v.link.length > 0) {
+            /*todo 判断是否有link vote投票情况下不支持link*/
+            if (typeof v.link === 'string' && v.link.length > 0 && _this.options.tagsType != 'radio') {
                 if (_this.options.edit) {
                     $item.next().attr('data-link', v.link);
                 } else {
@@ -306,10 +311,32 @@
         if (this.options.edit) {
             this.renderEditTags();
         }
-
+        if (this.options.tagsType == 'radio') {
+            this.renderSubmitBtn();
+        }
         this.updateDOM();
     };
 
+    Taggd.prototype.renderSubmitBtn = function () {
+        var _this = this;
+        var $button_submit = $('<div class="tags-radio-submit" />').html('提交预测');
+        _this.wrapper.append($button_submit);
+
+        if (typeof _this.options.submitHandlers === 'object') {
+            $.each(_this.options.submitHandlers, function (event, func) {
+                var handler;
+
+                if (typeof func === 'function') {
+                    handler = func;
+                }
+
+                $button_submit.on(event, function (e) {
+                    if (!handler) return;
+                    handler.call($button_submit, e);
+                });
+            });
+        }
+    }
 
     Taggd.prototype.renderEditTags = function () {
         var _this = this;
@@ -386,7 +413,7 @@
                 $e.empty().append($input, $button_ok, $button_delete, $button_link);
             }
         })
-    }
+    };
 
     Taggd.prototype.updateDOM = function () {
         console.log('update');
