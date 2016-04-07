@@ -8,11 +8,6 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=screen-width,user-scalable=no,initial-scale=1, maximum-scale=1">
     <title>image-tags</title>
-
-    <meta charset="UTF-8"/>
-
-    <title>image with tags</title>
-
     <link rel="stylesheet" href="./css/normalize.css"/>
     <link rel="stylesheet" href="./css/tags.css"/>
 
@@ -48,6 +43,7 @@
 <script>
     var options1 = {
         edit: false,
+        title:'我是测试',
         align: {
             y: 'top',
             x: 'left'
@@ -79,11 +75,13 @@
      **/
     var options2 = {
         edit: false,
+        title:'我是测试',
         tagsType: 'radio',
         radioBaseSize: 36,
         submitHandlers: {
             click: function () {
-                alert('提交')
+                alert('提交');
+                this.closest('.taggd-wrapper').find('input[type="radio"]').attr("disabled", true)
             }
         },
         align: {

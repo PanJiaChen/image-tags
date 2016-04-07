@@ -311,10 +311,19 @@
         if (this.options.edit) {
             this.renderEditTags();
         }
+        if (this.options.title) {
+            this.renderTitle();
+        }
         if (this.options.tagsType == 'radio') {
             this.renderSubmitBtn();
         }
         this.updateDOM();
+    };
+
+    Taggd.prototype.renderTitle = function () {
+        var _this = this;
+        var $title = $('<div class="tags-images-title" />').html(_this.options.title);
+        _this.wrapper.append($title);
     };
 
     Taggd.prototype.renderSubmitBtn = function () {
