@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="renderer" content="webkit">
     <meta name="format-detection" content="telephone=no">
-    <meta name="viewport" content="width=screen-width,user-scalable=no,initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1, maximum-scale=1">
     <title>image-tags</title>
     <link rel="stylesheet" href="./css/normalize.css"/>
     <link rel="stylesheet" href="./css/tags.css"/>
@@ -81,7 +81,7 @@
                     options2.id = resultTag.id;
                     options2.title = resultTag.title;
                     options2.imageUrl = resultTag.imageUrl;
-                    var $tagImg = $('<img id="taggd'+options2.id+'" src="'+options2.imageUrl+'" />');
+                    var $tagImg = $('<img id="taggd' + options2.id + '" src="' + options2.imageUrl + '" />');
                     $('.container').append($tagImg)
                     options2.endTime = resultTag.endTime;
                     options2.numOfUsers = resultTag.numOfUsers;
@@ -91,20 +91,20 @@
                     if (options2.maxSelected > 1) {
                         options2.handlers = {
                             click: function () {
+                                var _this = this
                                 validator({
                                     $target: $('.taggd-wrapper-container'),
                                     validType: "maxSelected",
                                     maxSelected: options2.maxSelected
                                 });
-//                                showSelect();
+                                showHandler(_this)
                             }
                         }
                     }
 
-
-
                     var data = resultTag.visualTags;
-                    var taggd2 = $('#taggd'+options2.id).taggd(options2, data);
+                    var taggd2 = $('#taggd' + options2.id).taggd(options2, data);
+
                 },
                 error: function (xhr, textStatus) {
 
@@ -112,8 +112,30 @@
             })
         }
 
-        getTag();
+        function showHandler(_this) {
+            var isChecked = $(_this).is(':checked');
+            if (isChecked) {
+                showSelect(_this)
+            } else {
+                delSelect(_this)
+            }
+        }
 
+        function showSelect(_this) {
+            var id = _this.attr("id");
+            var label = $(_this).closest('.taggd-wrapper').find("label[for='" + id + "']");
+            var text = $(label).text();
+            var $div = $('<div class="togged-checkbox-feedback checkbox-feedback-' + id + '">' + text + '</div>')
+            var $targetContainer = $('.tags-buttom-left');
+            $targetContainer.append($div)
+        }
+
+        function delSelect(_this) {
+            var id = _this.attr("id");
+            $('.checkbox-feedback-' + id).remove();
+        }
+
+        getTag();
 
 
     });

@@ -256,7 +256,7 @@
                 if (_this.options.maxSelected == 1) {
                     var $item = $('<input type="radio" name="tags" id="' + tagId + 'tags-' + i + '" />');
                 } else {
-                    var $item = $('<input  type="checkbox" name="tags" id="' + tagId + 'tags-' + i + '" />');
+                    var $item = $('<input  type="checkbox" name="tags" id="tags-' + tagId +'_' + i + '" />');
                 }
             }
 
@@ -277,7 +277,7 @@
                 if (_this.options.type == 'information') {
                     $hover = $('<span class="taggd-item-hover show complete" style="position: absolute;" />').html(v.text);
                 } else {
-                    $hover = $('<label class="taggd-item-hover show complete" for="' + tagId + 'tags-' + i + '" style="position: absolute;" />').html(v.text);
+                    $hover = $('<label class="taggd-item-hover show complete" for="tags-'+ tagId +'_' + i + '" style="position: absolute;" />').html(v.text);
                 }
 
                 $hover.attr({
