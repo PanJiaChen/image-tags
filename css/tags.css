@@ -1,6 +1,7 @@
-html,body{
+html, body {
     -webkit-tap-highlight-color: transparent;
 }
+
 .taggd-wrapper {
     /*overflow: hidden;*/
     position: relative;
@@ -88,6 +89,73 @@ html,body{
 }
 
 .taggd-wrapper input[type=radio].taggd-item::after {
+    border-radius: 50%;
+}
+
+/*checkbox*/
+.taggd-wrapper input[type=checkbox].taggd-item {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    min-width: 12px;
+    min-height: 12px;
+    padding: 0px;
+    -webkit-transition: all .15s ease-out;
+    transition: all .15s ease-out;
+    background: #fff;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    outline: 0;
+    position: relative;
+    vertical-align: -5px;
+}
+
+.taggd-wrapper input[type=checkbox].taggd-item:checked {
+    border: 1px solid #0A96FF;
+}
+
+.taggd-wrapper input[type=checkbox].taggd-item:checked::before {
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    content: ' ';
+    display: inline-block;
+    border-radius: 50%;
+    background-color: #0A96FF;
+    text-align: center;
+    left: 50%;
+    margin-left: -4px;
+    top: 50%;
+    margin-top: -4px;
+}
+
+.taggd-wrapper input[type=checkbox].taggd-item:focus {
+    outline: none !important;
+    outline-offset: 0px !important;
+}
+
+.taggd-wrapper input[type=checkbox].taggd-item:checked::after {
+    -webkit-animation: click-wave 0.65s;
+    -moz-animation: click-wave 0.65s;
+    animation: click-wave 0.65s;
+    background: #0A96FF;
+    content: '';
+    display: block;
+    position: relative;
+    z-index: 100;
+    border: none;
+}
+
+.taggd-wrapper input[type=checkbox].taggd-item {
+    border-radius: 50%;
+}
+
+.taggd-wrapper input[type=checkbox].taggd-item::after {
     border-radius: 50%;
 }
 
@@ -274,12 +342,51 @@ html,body{
     position: absolute;
 }
 
+/*预测标题*/
+.tags-images-title {
+    font-size: 24px;
+    text-align: center;
+    position: absolute;
+    top: 0px;
+    border-radius: 4px;
+    left: 0;
+    right: 0;
+    color: red;
+    text-align: center;
+    line-height: 40px;
+}
+
+/*预测底部info*/
+.tags-buttom-info {
+    width: 100%;
+    height: 60px;
+    background-color: #cccccc;
+}
+
+.tags-buttom-info .tags-buttom-left {
+    display: inline-block;
+    position: relative;
+}
+
+.tags-buttom-info .tags-buttom-left .tags-participation {
+    display: inline-block;
+    font-size: 28px;
+}
+
+.tags-buttom-info .tags-buttom-left .tags-finishTime {
+    display: inline-block;
+    font-size: 14px;
+}
+
+.tags-buttom-info .tags-buttom-right {
+    display: inline-block;
+    position: relative;
+}
 
 /*radio-submit 预测提交按钮*/
-.tags-radio-submit{
-    position: absolute;
+.tags-submit {
     height: 40px;
-    width:80px;
+    width: 80px;
     background: #3490DE;
     bottom: 0px;
     border-radius: 4px;
@@ -288,20 +395,4 @@ html,body{
     color: #fff;
     text-align: center;
     line-height: 40px;
-    margin: 0 auto -80px;
-}
-
-.tags-images-title{
-    font-size: 24px;
-    text-align: center;
-    position: absolute;
-    top :0px;
-    border-radius: 4px;
-    left: 0;
-    right: 0;
-    color: #fff;
-    text-align: center;
-    line-height: 40px;
-    margin: -20px auto;
-
 }

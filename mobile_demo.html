@@ -27,9 +27,6 @@
     <script src="./js/jquery.tags.js"></script>
 </head>
 <body>
-<div class="container">
-    <img src="./img/test.jpg" id='taggd1' alt=""/>
-</div>
 
 <div class="container">
     <img src="./img/test2.jpg" id='taggd2' alt=""/>
@@ -41,66 +38,115 @@
 </script>
 
 <script>
-    var options1 = {
-        edit: false,
-        title:'我是测试',
-        align: {
-            y: 'top',
-            x: 'left'
-        },
-        offset: {
-            top: -15,
-            left: 20
-        },
-        handlers: {
-//            click: 'toggle'
-        }
-    };
+    $(function () {
+        /**
+         * tag2
+         **/
+        var options2 = {
+            edit: false,
+            id: '',
+            type: "",
+            title: '',
+            maxSelected: 2,
+            participation: 13,
+            endTime: '1461232040',
+            baseSize: 36,
+            submitHandlers: {
+                click: function () {
+                    alert('提交');
+                    this.closest('.taggd-wrapper-container').find('input[type="radio"]').attr("disabled", true)
+                }
+            },
+            align: {
+                y: 'top',
+                x: 'left'
+            },
+            offset: {
+                top: -15,
+                left: 20
+            },
+            handlers: {
 
-    var data1 = [
-        {x: 0.62, y: 0.7, text: '潘蛤', percent: 0.1},
-        {x: 0.51, y: 0.5, text: '龙蛤', percent: 0.2},
-        {x: 0.40, y: 0.3, text: 'apple', link: 'http://gold.xitu.io/#/', percent: 0.7}
-    ];
-
-    var taggd1 = $('#taggd1').taggd(options1, data1);
-
-    //    taggd1.on('change', function () {
-    //        data1 = taggd1.data;
-    //    });
-
-
-    /**
-     * tag2
-     **/
-    var options2 = {
-        edit: false,
-        title:'我是测试',
-        tagsType: 'radio',
-        radioBaseSize: 36,
-        submitHandlers: {
-            click: function () {
-                alert('提交');
-                this.closest('.taggd-wrapper').find('input[type="radio"]').attr("disabled", true)
             }
-        },
-        align: {
-            y: 'top',
-            x: 'left'
-        },
-        offset: {
-            top: -15,
-            left: 20
-        },
-        handlers: {}
-    };
-    var data2 = [
-        {x: 0.62, y: 0.7, text: '潘蛤', percent: 0.1},
-        {x: 0.72, y: 0.8, text: '潘蛤', percent: 0.1},
-        {x: 0.51, y: 0.5, text: '龙蛤', percent: 0.2},
-        {x: 0.40, y: 0.3, text: 'apple', percent: 0.7}
-    ];
-    var taggd2 = $('#taggd2').taggd(options2, data2);
+        };
+//        var data2 = [
+//            {x: 0.62, y: 0.7, text: '潘蛤', percent: 0.1},
+//            {x: 0.72, y: 0.8, text: '潘蛤', percent: 0.1},
+//            {x: 0.51, y: 0.5, text: '龙蛤', percent: 0.2},
+//            {x: 0.40, y: 0.3, text: 'apple', percent: 0.7}
+//        ];
+
+
+        function getTag() {
+            var url = 'http://api.wallstcn.com/v2/heatmaps/1';
+            $.ajax({
+                url: url,
+                type: 'get',
+                dataType: 'jsonp',
+                success: function (result) {
+                    var resultTag = result;
+                    options2.id = resultTag.id;
+                    options2.title = resultTag.title;
+                    options2.imageUrl = resultTag.imageUrl;
+                    options2.endTime = resultTag.endTime;
+                    options2.numOfUsers = resultTag.numOfUsers;
+//                    options2.maxSelected = resultTag.maxSelected;
+                    options2.maxSelected = 2;
+
+                    if(options2.maxSelected>1){
+                        options2.handlers={
+                            click:function(){
+
+                            }
+                        }
+                    }
+
+                    var data = resultTag.visualTags;
+                    var taggd2 = $('#taggd2').taggd(options2, data);
+                },
+                error: function (xhr, textStatus) {
+
+                }
+            })
+        }
+
+        getTag()
+
+
+    });
+//    var options1 = {
+//        id: '1',
+//        edit: false,
+//        type: "poll",
+//        title: '我是测试',
+//        endTime: '1461232040',
+//        maxSelected: 1,
+//        participation: 1,
+//        align: {
+//            y: 'top',
+//            x: 'left'
+//        },
+//        offset: {
+//            top: -15,
+//            left: 20
+//        },
+//        handlers: {
+////            click: 'toggle'
+//        }
+//    };
+//
+//    var data1 = [
+//        {x: 0.62, y: 0.7, text: '潘蛤', percent: 0.1},
+//        {x: 0.51, y: 0.5, text: '龙蛤', percent: 0.2},
+//        {x: 0.40, y: 0.3, text: 'apple', link: 'http://gold.xitu.io/#/', percent: 0.7}
+//    ];
+//
+//    var taggd1 = $('#taggd1').taggd(options1, data1);
+//
+//    //    taggd1.on('change', function () {
+//    //        data1 = taggd1.data;
+//    //    });
+
 
 </script>
 

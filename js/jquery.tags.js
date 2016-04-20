@@ -127,8 +127,11 @@
         }
         var wrapper = $('<div class="taggd-wrapper" />');
         this.element.wrap(wrapper);
-
         this.wrapper = this.element.parent('.taggd-wrapper');
+
+        var wrapperContainer = $('<div class="taggd-wrapper-container" />');
+        this.wrapper.wrap(wrapperContainer);
+        this.wrapperContainer = this.element.closest('.taggd-wrapper-container');
     };
 
 
@@ -239,14 +242,20 @@
     Taggd.prototype.renderTags = function () {
         console.log('renderTags');
         var _this = this;
+        var tagId = this.options.id;
         this.clear();
         this.element.css({height: 'auto', width: 'auto'});
 
         $.each(this.data, function (i, v) {
-            if (_this.options.tagsType == 'radio') {
-                var $item = $('<input type="radio" name="tags" id="tags-' + i + '" />');
-            } else {
+            if (_this.options.type == 'information') {
                 var $item = $('<span />');
+            }
+            else {
+                if (_this.options.maxSelected == 1) {
+                    var $item = $('<input type="radio" name="tags" id="' + tagId + 'tags-' + i + '" />');
+                } else {
+                    var $item = $('<input type="checkbox" name="tags" id="' + tagId + 'tags-' + i + '" />');
+                }
             }
 
             var $hover;
@@ -263,12 +272,11 @@
             _this.wrapper.append($item);
 
             if (typeof v.text === 'string' && (v.text.length > 0 || _this.options.edit)) {
-                if (_this.options.tagsType == 'radio') {
-                    $hover = $('<label class="taggd-item-hover show complete" for="tags-' + i + '" style="position: absolute;" />').html(v.text);
-                } else {
+                if (_this.options.type == 'information') {
                     $hover = $('<span class="taggd-item-hover show complete" style="position: absolute;" />').html(v.text);
+                } else {
+                    $hover = $('<label class="taggd-item-hover show complete" for="' + tagId + 'tags-' + i + '" style="position: absolute;" />').html(v.text);
                 }
-
 
                 $hover.attr({
                     'data-x': v.x,
@@ -279,7 +287,7 @@
             }
 
             /*todo 判断是否有link vote投票情况下不支持link*/
-            if (typeof v.link === 'string' && v.link.length > 0 && _this.options.tagsType != 'radio') {
+            if (typeof v.link === 'string' && v.link.length > 0 && _this.options.tagsType == 'information') {
                 if (_this.options.edit) {
                     $item.next().attr('data-link', v.link);
                 } else {
@@ -314,22 +322,46 @@
         if (this.options.title) {
             this.renderTitle();
         }
-        if (this.options.tagsType == 'radio') {
-            this.renderSubmitBtn();
-        }
+
+        this.renderBottomInfo();
+
+
         this.updateDOM();
     };
 
     Taggd.prototype.renderTitle = function () {
         var _this = this;
         var $title = $('<div class="tags-images-title" />').html(_this.options.title);
-        _this.wrapper.append($title);
+        _this.wrapperContainer.prepend($title);
+    };
+
+    Taggd.prototype.renderBottomInfo = function () {
+        var _this = this;
+        var participation = this.options.numOfUsers;
+        var finishTime = this.transformTime(_this.options.endTime);
+        var $buttomInfo = $('<div class="tags-buttom-info" />');
+        _this.wrapperContainer.append($buttomInfo);
+
+        var $buttomLeftContainer = $('<div class="tags-buttom-left" />');
+        var $participation = $('<div class="tags-participation" />' + participation + '人参与</div>');
+        var $finshTime = $('<div class="tags-finishTime" />' + finishTime + '</div>');
+
+        var $buttomRightContainer = $('<div class="tags-buttom-right" />');
+        var $share = $('<a href="" class="tags-share" >分享</a>')
+        if (this.options.type != 'information') {
+            var $submitBtn = _this.renderSubmitBtn();
+        }
+
+        $buttomLeftContainer.append($participation, $finshTime);
+        $buttomRightContainer.append($submitBtn, $share);
+
+        $buttomInfo.append($buttomLeftContainer, $buttomRightContainer);
+
     };
 
     Taggd.prototype.renderSubmitBtn = function () {
         var _this = this;
-        var $button_submit = $('<div class="tags-radio-submit" />').html('提交预测');
-        _this.wrapper.append($button_submit);
+        var $button_submit = $('<div class="tags-submit" />').html('提交预测');
 
         if (typeof _this.options.submitHandlers === 'object') {
             $.each(_this.options.submitHandlers, function (event, func) {
@@ -345,7 +377,9 @@
                 });
             });
         }
-    }
+
+        return $button_submit
+    };
 
     Taggd.prototype.renderEditTags = function () {
         var _this = this;
@@ -441,19 +475,19 @@
             var top = $el.attr('data-y') * _this.element.height();
 
             if ($el.hasClass('taggd-item')) {
-                if (_this.options.tagsType && _this.options.tagsType == 'radio') {
-                    var baseSize = _this.options.radioBaseSize || 30;
+                if (_this.options.tagsType && _this.options.tagsType == 'information') {
+                    $el.css({
+                        left: left - $el.outerWidth(true) / 2,
+                        top: top - $el.outerHeight(true) / 2
+                    });
+                } else {
+                    var baseSize = _this.options.baseSize || 30;
                     var size = $el.attr('data-p') * baseSize;
                     $el.css({
                         left: left - $el.outerWidth(true) / 2,
                         top: top - $el.outerHeight(true) / 2,
                         width: size,
                         height: size
-                    });
-                } else {
-                    $el.css({
-                        left: left - $el.outerWidth(true) / 2,
-                        top: top - $el.outerHeight(true) / 2
                     });
                 }
 
@@ -478,6 +512,23 @@
                 });
             }
         });
+    };
+
+
+    Taggd.prototype.transformTime = function (timestamp) {
+        var nowTimestamp = Date.parse(new Date());
+        var targetTimestamp = +timestamp * 1000;
+        if (targetTimestamp <= nowTimestamp) {
+            return false
+        }
+
+        var diff = (targetTimestamp - nowTimestamp) / 1000;
+
+        if (diff < 3600) { //less 1 hour
+            return '剩余' + Math.ceil(diff / 60) + '分钟后结束'
+        } else {
+            return '剩余' + Math.ceil(diff / 3600) + '小时后结束'
+        }
     };
 
 
