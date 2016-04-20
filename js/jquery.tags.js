@@ -129,7 +129,7 @@
         this.element.wrap(wrapper);
         this.wrapper = this.element.parent('.taggd-wrapper');
 
-        var wrapperContainer = $('<div class="taggd-wrapper-container"  data-maxSelected="'+this.options.maxSelected +'" />');
+        var wrapperContainer = $('<div class="taggd-wrapper-container"  data-maxSelected="' + this.options.maxSelected + '" />');
 
 
         this.wrapper.wrap(wrapperContainer);
@@ -244,19 +244,19 @@
     Taggd.prototype.renderTags = function () {
         console.log('renderTags');
         var _this = this;
-        var tagId = this.options.id;
+        var tagId = this.options.id || 1;
         this.clear();
         this.element.css({height: 'auto', width: 'auto'});
 
         $.each(this.data, function (i, v) {
             if (_this.options.type == 'information') {
-                var $item = $('<span />');
+                var $item = $('<span id="' + 'tags-' + tagId + '_' + i + '" />');
             }
             else {
                 if (_this.options.maxSelected == 1) {
-                    var $item = $('<input type="radio" name="tags" id="' + tagId + 'tags-' + i + '" />');
+                    var $item = $('<input type="radio" name="tags" id="' + 'tags-' + tagId + '_' + i + '" />');
                 } else {
-                    var $item = $('<input  type="checkbox" name="tags" id="tags-' + tagId +'_' + i + '" />');
+                    var $item = $('<input  type="checkbox" name="tags" id="' + 'tags-' + tagId + '_' + i + '" />');
                 }
             }
 
@@ -265,7 +265,8 @@
             $item.attr({
                 'data-x': v.x,
                 'data-y': v.y,
-                'data-p': v.percent
+                'data-p': v.percent,
+                'data-link': v.link
             });
 
             $item.css('position', 'absolute');
@@ -275,14 +276,15 @@
 
             if (typeof v.text === 'string' && (v.text.length > 0 || _this.options.edit)) {
                 if (_this.options.type == 'information') {
-                    $hover = $('<span class="taggd-item-hover show complete" style="position: absolute;" />').html(v.text);
+                    $hover = $('<span class="taggd-item-hover show complete" data-id="' + 'tags-' + tagId + '_' + i + '" style="position: absolute;" />').html(v.text);
                 } else {
-                    $hover = $('<label class="taggd-item-hover show complete" for="tags-'+ tagId +'_' + i + '" style="position: absolute;" />').html(v.text);
+                    $hover = $('<label class="taggd-item-hover show complete" for="' + 'tags-' + tagId + '_' + i + '" style="position: absolute;" />').html(v.text);
                 }
 
                 $hover.attr({
                     'data-x': v.x,
-                    'data-y': v.y
+                    'data-y': v.y,
+                    'data-link': v.link
                 });
 
                 _this.wrapper.append($hover);
@@ -320,12 +322,12 @@
 
         if (this.options.edit) {
             this.renderEditTags();
+        } else {
+            this.renderBottomInfo();
         }
         if (this.options.title) {
             this.renderTitle();
         }
-
-        this.renderBottomInfo();
 
 
         this.updateDOM();
@@ -390,8 +392,8 @@
             var $e = $(this);
             var linkUrl = $e.attr('data-link');
             var $input = $('<input type="text" />').val($e.text());
-            var $button_ok = $('<button />').html(_this.options.strings.save);
-            var $button_delete = $('<button />').html(_this.options.strings.delete);
+            var $button_ok = $('<button class="taggd-okBtn" />').html(_this.options.strings.save);
+            var $button_delete = $('<button class="taggd-delBtn" />').html(_this.options.strings.delete);
             var $button_link = $('<button />').html(_this.options.strings.addLink);
             var $input_link = $('<input class="tag-link" />').val(linkUrl);
 
