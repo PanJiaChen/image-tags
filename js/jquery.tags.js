@@ -129,7 +129,9 @@
         this.element.wrap(wrapper);
         this.wrapper = this.element.parent('.taggd-wrapper');
 
-        var wrapperContainer = $('<div class="taggd-wrapper-container" />');
+        var wrapperContainer = $('<div class="taggd-wrapper-container"  data-maxSelected="'+this.options.maxSelected +'" />');
+
+
         this.wrapper.wrap(wrapperContainer);
         this.wrapperContainer = this.element.closest('.taggd-wrapper-container');
     };
@@ -254,7 +256,7 @@
                 if (_this.options.maxSelected == 1) {
                     var $item = $('<input type="radio" name="tags" id="' + tagId + 'tags-' + i + '" />');
                 } else {
-                    var $item = $('<input type="checkbox" name="tags" id="' + tagId + 'tags-' + i + '" />');
+                    var $item = $('<input  type="checkbox" name="tags" id="' + tagId + 'tags-' + i + '" />');
                 }
             }
 
