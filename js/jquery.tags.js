@@ -101,11 +101,12 @@
                 var poffset = $(this).parent().offset(),
                     x = (e.pageX - poffset.left) / _this.element.width(),
                     y = (e.pageY - poffset.top) / _this.element.height();
-
                 _this.addData({
-                    x: x,
-                    y: y,
-                    text: ''
+                    x: x.toFixed(2),
+                    y: y.toFixed(2),
+                    source: {
+                        title: ''
+                    }
                 });
 
                 _this.show(_this.data.length - 1);
@@ -249,6 +250,7 @@
         this.element.css({height: 'auto', width: 'auto'});
 
         $.each(this.data, function (i, v) {
+            var source = v.source;
             if (_this.options.type == 'information') {
                 var $item = $('<span id="' + 'tags-' + tagId + '_' + i + '" />');
             }
@@ -273,18 +275,19 @@
             $item.addClass('taggd-item');
 
             _this.wrapper.append($item);
-
-            if (typeof v.text === 'string' && (v.text.length > 0 || _this.options.edit)) {
+            if (source.title.length > 0 || _this.options.edit) {
                 if (_this.options.type == 'information') {
-                    $hover = $('<span class="taggd-item-hover show complete" data-id="' + 'tags-' + tagId + '_' + i + '" style="position: absolute;" />').html(v.text);
+                    $hover = $('<span class="taggd-item-hover show complete" data-id="' + 'tags-' + tagId + '_' + i + '" style="position: absolute;" />').html(source.title);
                 } else {
-                    $hover = $('<label class="taggd-item-hover show complete" for="' + 'tags-' + tagId + '_' + i + '" style="position: absolute;" />').html(v.text);
+                    $hover = $('<label class="taggd-item-hover show complete" for="' + 'tags-' + tagId + '_' + i + '" style="position: absolute;" />').html(source.title);
                 }
 
                 $hover.attr({
                     'data-x': v.x,
                     'data-y': v.y,
-                    'data-link': v.link
+                    'data-link': v.link,
+                    "data-id": v.id,
+                    "data-sourceId": source.id
                 });
 
                 _this.wrapper.append($hover);
@@ -295,7 +298,7 @@
                 if (_this.options.edit) {
                     $item.next().attr('data-link', v.link);
                 } else {
-                    $item.next().empty().html('<a href="' + v.link + '" target="_blank">' + v.text + '</a>');
+                    $item.next().empty().html('<a href="' + v.link + '" target="_blank">' + v.source.title + '</a>');
                 }
 
             }
@@ -407,11 +410,11 @@
                 var $link = $e.find('.tag-link');
 
                 if (item) {
-                    item.text = $input.val();
+                    item.source.title = $input.val();
                 }
 
                 if ($link) {
-                    item.link = $link.val();
+                    item.source.url = $link.val();
                 }
 
                 _this.renderTags();
@@ -441,13 +444,14 @@
                 $e.removeClass('complete');
             });
 
-            $input.on("keyup", function (e) {
+            $input.on("keypress", function (e) {
+
                 if (e.keyCode == KEY_ENTER) {
                     $button_ok.trigger('click')
                 }
             });
 
-            $input_link.on("keyup", function (e) {
+            $input_link.on("keypress", function (e) {
                 if (e.keyCode == KEY_ENTER) {
                     $button_ok.trigger('click')
                 }
